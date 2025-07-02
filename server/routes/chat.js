@@ -69,14 +69,20 @@ router.delete('/history', async (req, res) => {
 // Get AI model information
 router.get('/model-info', (req, res) => {
   res.json({
-    model: process.env.OPENAI_MODEL || 'gpt-3.5-turbo',
+    model: process.env.OLLAMA_MODEL || 'qwen2.5:0.5b',
     maxTokens: 4096,
     temperature: 0.7,
     availableModels: [
-      'gpt-3.5-turbo',
-      'gpt-3.5-turbo-16k',
-      'gpt-4',
-      'gpt-4-turbo'
+      'qwen2.5:0.5b',
+      'phi2',
+      'tinyllama',
+      'llama2',
+      'llama2:7b',
+      'llama2:13b',
+      'mistral',
+      'mistral:7b',
+      'codellama',
+      'codellama:7b'
     ]
   });
 });

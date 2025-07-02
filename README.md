@@ -5,7 +5,7 @@ A comprehensive real-time AI voice agent that can listen, process, and respond t
 ## Features
 
 - 🎤 **Real-time Speech Recognition** - Convert speech to text instantly
-- 🤖 **AI Processing** - Powered by OpenAI's GPT models for intelligent responses
+- 🤖 **AI Processing** - Powered by Ollama (local LLM) for intelligent responses
 - 🔊 **Text-to-Speech** - Natural-sounding voice responses
 - 🌐 **Web Interface** - Modern, responsive UI for easy interaction
 - ⚡ **Real-time Communication** - WebSocket-based live audio streaming
@@ -15,7 +15,7 @@ A comprehensive real-time AI voice agent that can listen, process, and respond t
 
 - **Backend**: Node.js, Express, Socket.IO
 - **Frontend**: React, Web Audio API
-- **AI**: OpenAI GPT API
+- **AI**: Ollama (Local LLM) for chat completion, OpenAI for speech processing
 - **Speech**: Web Speech API, OpenAI Whisper
 - **Audio**: WebRTC, MediaRecorder API
 
@@ -23,7 +23,8 @@ A comprehensive real-time AI voice agent that can listen, process, and respond t
 
 - Node.js (v16 or higher)
 - npm or yarn
-- OpenAI API key
+- OpenAI API key (for speech-to-text and text-to-speech)
+- Ollama installed and running locally
 - Microphone access
 - Speakers/headphones
 
@@ -44,18 +45,32 @@ A comprehensive real-time AI voice agent that can listen, process, and respond t
    ```bash
    cp .env.example .env
    ```
-   Edit `.env` and add your OpenAI API key:
+   Edit `.env` and add your configuration:
    ```
    OPENAI_API_KEY=your_openai_api_key_here
+   OLLAMA_HOST=http://localhost:11434
+   OLLAMA_MODEL=qwen2.5:0.5b
    PORT=3001
    ```
 
-4. **Start the development server**
+4. **Install and start Ollama**
+   ```bash
+   # Install Ollama (macOS/Linux)
+   curl -fsSL https://ollama.ai/install.sh | sh
+   
+   # Start Ollama service
+   ollama serve
+   
+   # Pull a model (in a new terminal)
+   ollama pull qwen2.5:0.5b
+   ```
+
+5. **Start the development server**
    ```bash
    npm run dev
    ```
 
-5. **Open your browser**
+6. **Open your browser**
    Navigate to `http://localhost:3000`
 
 ## Usage
