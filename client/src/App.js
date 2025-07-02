@@ -10,6 +10,7 @@ import { motion } from 'framer-motion';
 function App() {
   const [isRecording, setIsRecording] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [isAwaitingChatCompletion, setIsAwaitingChatCompletion] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [conversation, setConversation] = useState([]);
   
@@ -38,6 +39,8 @@ function App() {
       setIsProcessing(true);
       const result = await stopRecording();
       
+      setIsProcessing(false);
+      
       console.log('Recording stopped, result:', result);
       
       if (result && result.error) {
@@ -54,6 +57,7 @@ function App() {
         
         setConversation(prev => [...prev, userMessage]);
         
+        setIsAwaitingChatCompletion(true);
         console.log('Sending message to AI...');
         const aiResponse = await sendMessage(result.text);
         
@@ -69,6 +73,7 @@ function App() {
           
           setConversation(prev => [...prev, aiMessage]);
         }
+        setIsAwaitingChatCompletion(false);
       } else {
         console.log('No text result from speech-to-text');
         toast.error('No speech detected. Please try again.');
@@ -76,15 +81,13 @@ function App() {
     } catch (error) {
       console.error('Failed to stop recording:', error);
       toast.error('Failed to process recording');
-    } finally {
-      setIsProcessing(false);
+      setIsAwaitingChatCompletion(false);
     }
   };
 
   const handleTextMessage = async (message) => {
     try {
-      setIsProcessing(true);
-      
+      setIsAwaitingChatCompletion(true);
       const userMessage = {
         id: Date.now(),
         type: 'user',
@@ -110,7 +113,7 @@ function App() {
     } catch (error) {
       console.error('Failed to send message:', error);
     } finally {
-      setIsProcessing(false);
+      setIsAwaitingChatCompletion(false);
     }
   };
 
@@ -147,7 +150,7 @@ function App() {
             conversation={conversation}
             onSendMessage={handleTextMessage}
             onClearConversation={clearConversation}
-            isProcessing={isProcessing}
+            isProcessing={isAwaitingChatCompletion}
           />
         </motion.div>
       </main>
